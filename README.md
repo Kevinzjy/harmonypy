@@ -44,6 +44,34 @@ result = pd.DataFrame(harmony_out.Z_corr, columns=pcs.columns)
 result.to_csv("pbmc_3500_pcs_harmony.tsv", sep="\t", index=False)
 ```
 
+
+## Usage with Scanpy
+
+```python
+import scanpy as sc
+import harmonypy as hm
+
+# Load and preprocess your data
+adata = sc.read_h5ad("my_data.h5ad")
+sc.pp.pca(adata)
+
+# Get PCs from the AnnData object
+pcs = adata.obsm['X_pca']
+print(pcs.shape)  # (n_cells, n_pcs)
+
+# Run Harmony on the PCA embedding
+harmony_out = hm.run_harmony(pcs, adata.obs, "batch")
+
+# Store corrected PCs back in the AnnData object
+adata.obsm['X_pca_harmony'] = harmony_out.Z_corr
+
+# Use harmonized PCs for downstream analysis
+sc.pp.neighbors(adata, use_rep='X_pca_harmony')
+sc.tl.umap(adata)
+sc.tl.leiden(adata)
+```
+
+
 ## Performance
 
 Apple M1 Ultra (2022) with PyTorch MPS backend:

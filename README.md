@@ -13,7 +13,7 @@
 **harmonypy** is a Python implementation of the [Harmony] algorithm for integrating multiple high-dimensional datasets.
 
 <p align="center">
-  <img src="https://i.imgur.com/lqReopf.gif">
+  <img src="https://github.com/user-attachments/assets/018f82a7-ebb2-47a7-a340-dc9427c51b50">
 </p>
 
 This animation shows Harmony aligning three single-cell RNA-seq datasets from different donors. [→ How to make this animation](https://slowkow.com/notes/harmony-animation/). Before Harmony, you can clearly distinguish cells from each of the three donors. After Harmony, the cells from different donors are mixed while preserving the overall shape of the data. This makes it easier to run clustering algorithms to find similar cell types that are present in different batches of data.

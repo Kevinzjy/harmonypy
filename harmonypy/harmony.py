@@ -367,10 +367,15 @@ class Harmony:
         logger.info("Computing initial centroids with sklearn.KMeans...")
         # KMeans needs CPU numpy array
         Z_cos_np = self._Z_cos.cpu().numpy()
-        model = KMeans(n_clusters=self.K, init='k-means++',
-                       n_init=1, max_iter=25, random_state=random_state)
-        model.fit(Z_cos_np.T)
-        self._Y = torch.tensor(model.cluster_centers_.T, dtype=torch.float32, device=self.device)
+        
+        from scipy.cluster.vq import kmeans2
+        km_centroids, _ = kmeans2(Z_cos_np.T, self.K, minit='++', seed=0)
+        self._Y = torch.tensor(km_centroids.T, dtype=torch.float32, device=self.device)
+
+        # model = KMeans(n_clusters=self.K, init='k-means++',
+        #                n_init=1, max_iter=25, random_state=random_state)
+        # model.fit(Z_cos_np.T)
+        # self._Y = torch.tensor(model.cluster_centers_.T, dtype=torch.float32, device=self.device)
         logger.info("KMeans initialization complete.")
         
         # Normalize centroids
